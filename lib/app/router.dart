@@ -2,6 +2,7 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_scanner/app/layout/scaffold.dart';
 import 'package:qr_scanner/features/home/presentation/home_screen.dart';
 import 'package:qr_scanner/features/scanner/presentation/scanner_screen.dart';
 import 'package:qr_scanner/features/settings/presentation/settings_screen.dart';
@@ -18,13 +19,14 @@ class AppRoutes {
 
   static HashMap<String, int> indexes = HashMap<String, int>.from({
     AppRoutes.home: 0,
-    AppRoutes.settings: 1,
+    AppRoutes.scanner: 1,
+    AppRoutes.settings: 2,
   });
 
   static HashMap<String, String> titles = HashMap<String, String>.from({
     AppRoutes.home: AppRoutes.titleHome,
-    AppRoutes.settings: AppRoutes.titleSettings,
     AppRoutes.scanner: AppRoutes.titleScanner,
+    AppRoutes.settings: AppRoutes.titleSettings,
   });
 }
 
@@ -32,22 +34,33 @@ class AppRouter {
   final GoRouter router;
 
   AppRouter()
-      : router = GoRouter(initialLocation: AppRoutes.scanner, routes: [
-          GoRoute(
-            path: AppRoutes.home,
-            pageBuilder: (ctx, state) =>
-                AppRouter.customTransitionPage(HomeScreenWidget(), state),
-          ),
-          GoRoute(
-            path: AppRoutes.scanner,
-            pageBuilder: (ctx, state) =>
-                AppRouter.customTransitionPage(ScannerScreenWidget(), state),
-          ),
-          GoRoute(
-            path: AppRoutes.scanner,
-            pageBuilder: (ctx, state) =>
-                AppRouter.customTransitionPage(SettingsScreenWidget(), state),
-          ),
+      : router = GoRouter(initialLocation: AppRoutes.home, routes: [
+          ShellRoute(
+              builder: (context, state, child) {
+                final url = state.uri.toString();
+                final String pageTitle = AppRoutes.titles[url] ?? 'App';
+                return AppScaffold(
+                  child: child,
+                  title: pageTitle,
+                );
+              },
+              routes: [
+                GoRoute(
+                  path: AppRoutes.home,
+                  pageBuilder: (ctx, state) =>
+                      AppRouter.customTransitionPage(HomeScreenWidget(), state),
+                ),
+                GoRoute(
+                  path: AppRoutes.scanner,
+                  pageBuilder: (ctx, state) => AppRouter.customTransitionPage(
+                      ScannerScreenWidget(), state),
+                ),
+                GoRoute(
+                  path: AppRoutes.settings,
+                  pageBuilder: (ctx, state) => AppRouter.customTransitionPage(
+                      SettingsScreenWidget(), state),
+                ),
+              ]),
         ]);
 
   static CustomTransitionPage customTransitionPage(
