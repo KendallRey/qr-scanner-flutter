@@ -40,8 +40,8 @@ class AppRouter {
                 final url = state.uri.toString();
                 final String pageTitle = AppRoutes.titles[url] ?? 'App';
                 return AppScaffold(
-                  child: child,
                   title: pageTitle,
+                  child: child,
                 );
               },
               routes: [
