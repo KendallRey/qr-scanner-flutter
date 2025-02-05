@@ -32,25 +32,23 @@ class AppRouter {
   final GoRouter router;
 
   AppRouter()
-      : router = GoRouter(
-            initialLocation: AppRoutes.scanner,
-            routes: [
-              GoRoute(
-                path: AppRoutes.home,
-                pageBuilder: (ctx, state) =>
-                    AppRouter.customTransitionPage(HomeScreenWidget(), state),
-              ),
-              GoRoute(
-                path: AppRoutes.scanner,
-                pageBuilder: (ctx, state) =>
-                    AppRouter.customTransitionPage(ScannerScreenWidget(), state),
-              ),
-              GoRoute(
-                path: AppRoutes.scanner,
-                pageBuilder: (ctx, state) =>
-                    AppRouter.customTransitionPage(SettingsScreenWidget(), state),
-              ),
-            ]);
+      : router = GoRouter(initialLocation: AppRoutes.scanner, routes: [
+          GoRoute(
+            path: AppRoutes.home,
+            pageBuilder: (ctx, state) =>
+                AppRouter.customTransitionPage(HomeScreenWidget(), state),
+          ),
+          GoRoute(
+            path: AppRoutes.scanner,
+            pageBuilder: (ctx, state) =>
+                AppRouter.customTransitionPage(ScannerScreenWidget(), state),
+          ),
+          GoRoute(
+            path: AppRoutes.scanner,
+            pageBuilder: (ctx, state) =>
+                AppRouter.customTransitionPage(SettingsScreenWidget(), state),
+          ),
+        ]);
 
   static CustomTransitionPage customTransitionPage(
       Widget page, GoRouterState state) {
