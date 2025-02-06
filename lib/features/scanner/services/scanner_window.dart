@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class BarcodeScannerWithScanWindow extends StatefulWidget {
   const BarcodeScannerWithScanWindow({super.key});
@@ -36,13 +37,21 @@ class _BarcodeScannerWithScanWindowState
     }
   }
 
-  void _handleOpen() {
-    if (mounted) {
+  void _handleOpen(Barcode? barcode) {
+    if (mounted && barcode != null) {
       context.pop(true);
       setState(() {
         _barcode = null;
       });
+      _makePhoneCall(barcode.rawValue);
     }
+  }
+
+  Future<void> _makePhoneCall(String? uri) async {
+    if (uri == null) return;
+    final Uri? launchUri = Uri.tryParse(uri);
+    if (launchUri == null) return;
+    await launchUrl(launchUri);
   }
 
   Future<bool?> _showOpenScannedDialog(Barcode? _barcode) async {
@@ -58,7 +67,7 @@ class _BarcodeScannerWithScanWindowState
                 child: Text('Close'),
               ),
               ElevatedButton(
-                onPressed: _handleOpen,
+                onPressed: () => _handleOpen(_barcode),
                 child: Text('Open'),
               ),
             ],
