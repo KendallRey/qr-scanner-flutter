@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_scanner/app/core/model/scan_item.dart';
 import 'package:qr_scanner/app/core/widgets/text_copy.dart';
 import 'package:qr_scanner/app/core/widgets/text_error.dart';
+import 'package:qr_scanner/app/core/widgets/text_success.dart';
+import 'package:qr_scanner/app/services/scan_item_service.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BarcodeScannerWithScanWindow extends StatefulWidget {
@@ -26,7 +29,29 @@ class _BarcodeScannerWithScanWindowState
       setState(() {
         _barcode = captured.barcodes.firstOrNull;
       });
-      _showOpenScannedDialog(captured.barcodes.firstOrNull);
+      final barcode = captured.barcodes.firstOrNull;
+      _saveAsScanItem(barcode);
+      _showOpenScannedDialog(barcode);
+    }
+  }
+
+  void _saveAsScanItem(Barcode? barcode) {
+    if (barcode == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: TextErrorWidget(
+          text: "Error: Can't read QR Code!",
+        )));
+      }
+      return;
+    }
+    if (barcode.rawValue != null) {
+      final scanItem = ScanItem.create(barcode.rawValue!);
+      ScanItemService.saveScanItem(scanItem);
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: TextSuccessWidget(
+        text: "QR Saved!",
+      )));
     }
   }
 
