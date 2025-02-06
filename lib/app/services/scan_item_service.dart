@@ -23,7 +23,12 @@ class ScanItemService {
     await box.put(item.id, item);
   }
 
-  // Stream<BoxEvent> getScannedItems () async* {
+  static Future<List<dynamic>> getAllScannedItems() async {
+    final box = await getHiveBox();
+    return box.values.toList();
+  }
+
+  // Stream<BoxEvent> getStreamScannedItems () async* {
   //   final box = await getHiveBox();
   //   yield* box.watch();
   // }
