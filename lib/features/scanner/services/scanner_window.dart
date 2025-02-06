@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_scanner/app/core/widgets/text_copy.dart';
 import 'package:qr_scanner/app/core/widgets/text_error.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -84,7 +85,10 @@ class _BarcodeScannerWithScanWindowState
         builder: (context) {
           return AlertDialog(
             title: Text('QR Code'),
-            content: Text(barcode?.displayValue ?? 'Failed to read QR!'),
+            content: TextCopy(
+              text: barcode?.displayValue ?? 'Failed to read QR!',
+              disable: barcode == null,
+            ),
             actions: [
               TextButton(
                 onPressed: _handleClose, // Cancel
