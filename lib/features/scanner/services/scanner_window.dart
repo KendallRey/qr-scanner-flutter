@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:qr_scanner/app/core/widgets/text_error.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BarcodeScannerWithScanWindow extends StatefulWidget {
@@ -43,31 +44,54 @@ class _BarcodeScannerWithScanWindowState
       setState(() {
         _barcode = null;
       });
-      _makePhoneCall(barcode.rawValue);
+      _parseOpenBarcode(barcode.rawValue);
     }
   }
 
-  Future<void> _makePhoneCall(String? uri) async {
-    if (uri == null) return;
-    final Uri? launchUri = Uri.tryParse(uri);
-    if (launchUri == null) return;
-    await launchUrl(launchUri);
+  Future<void> _parseOpenBarcode(String? uri) async {
+    try {
+      if (mounted) {
+        if (uri == null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: TextErrorWidget(
+            text: "Error: Invalid QR Code!",
+          )));
+          return;
+        }
+        final Uri? launchUri = Uri.tryParse(uri);
+        if (launchUri == null) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: TextErrorWidget(
+            text: "Error: Failed to Read URI!",
+          )));
+          return;
+        }
+        await launchUrl(launchUri);
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: TextErrorWidget(
+          text: "Error: Failed to Launch!",
+        )));
+      }
+    }
   }
 
-  Future<bool?> _showOpenScannedDialog(Barcode? _barcode) async {
+  Future<bool?> _showOpenScannedDialog(Barcode? barcode) async {
     return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: Text('QR Code'),
-            content: Text(_barcode?.displayValue ?? 'Failed to read QR!'),
+            content: Text(barcode?.displayValue ?? 'Failed to read QR!'),
             actions: [
               TextButton(
                 onPressed: _handleClose, // Cancel
                 child: Text('Close'),
               ),
               ElevatedButton(
-                onPressed: () => _handleOpen(_barcode),
+                onPressed: () => _handleOpen(barcode),
                 child: Text('Open'),
               ),
             ],
