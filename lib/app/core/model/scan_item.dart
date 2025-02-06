@@ -1,8 +1,9 @@
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+part 'scan_item.g.dart';
 
-@HiveType(typeId: 1)
-class ScanItem {
+@HiveType(typeId: 0)
+class ScanItem extends HiveObject {
   @HiveField(0)
   String id;
 

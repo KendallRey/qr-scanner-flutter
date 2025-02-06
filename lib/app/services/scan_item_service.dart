@@ -28,6 +28,12 @@ class ScanItemService {
     return box.values.toList();
   }
 
+  static void flushScanItems() async {
+    final box = await getHiveBox();
+    await box.flush();
+    await box.clear();
+  }
+
   // Stream<BoxEvent> getStreamScannedItems () async* {
   //   final box = await getHiveBox();
   //   yield* box.watch();
