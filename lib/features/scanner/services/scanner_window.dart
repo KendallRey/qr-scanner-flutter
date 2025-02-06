@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:qr_scanner/app/core/widgets/barcode_overlay.dart';
-import 'package:qr_scanner/app/core/widgets/scan_window_overlay.dart';
-import 'package:qr_scanner/features/scanner/services/scanned_barcode_label.dart';
+import 'package:go_router/go_router.dart';
 
 class BarcodeScannerWithScanWindow extends StatefulWidget {
   const BarcodeScannerWithScanWindow({super.key});
@@ -18,42 +16,63 @@ class _BarcodeScannerWithScanWindowState
     detectionSpeed: DetectionSpeed.unrestricted,
   );
 
-  // TODO: Fix BoxFit.fill & BoxFit.fitHeight
-  final boxFit = BoxFit.contain;
+  Barcode? _barcode;
+
+  void _handleOnDetect(BarcodeCapture captured) {
+    if (mounted && _barcode == null) {
+      setState(() {
+        _barcode = captured.barcodes.firstOrNull;
+      });
+      _showOpenScannedDialog(captured.barcodes.firstOrNull);
+    }
+  }
+
+  void _handleClose() {
+    if (mounted) {
+      context.pop(false);
+      setState(() {
+        _barcode = null;
+      });
+    }
+  }
+
+  void _handleOpen() {
+    if (mounted) {
+      context.pop(true);
+      setState(() {
+        _barcode = null;
+      });
+    }
+  }
+
+  Future<bool?> _showOpenScannedDialog(Barcode? _barcode) async {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('QR Code'),
+            content: Text(_barcode?.displayValue ?? 'Failed to read QR!'),
+            actions: [
+              TextButton(
+                onPressed: _handleClose, // Cancel
+                child: Text('Close'),
+              ),
+              ElevatedButton(
+                onPressed: _handleOpen,
+                child: Text('Open'),
+              ),
+            ],
+          );
+        });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final scanWindow = Rect.fromCenter(
-      center: MediaQuery.sizeOf(context).center(const Offset(0, -100)),
-      width: 300,
-      height: 200,
-    );
-
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        MobileScanner(
-          fit: boxFit,
-          scanWindow: scanWindow,
-          controller: controller,
-        ),
-        BarcodeOverlay(controller: controller, boxFit: boxFit),
-        ScanWindowOverlay(
-          scanWindow: scanWindow,
-          controller: controller,
-        ),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: Container(
-            alignment: Alignment.center,
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            height: 100,
-            color: const Color.fromRGBO(0, 0, 0, 0.4),
-            child: ScannedBarcodeLabel(barcodes: controller.barcodes),
-          ),
-        ),
-      ],
-    );
+    return SizedBox.expand(
+        child: MobileScanner(
+      controller: controller,
+      onDetect: _handleOnDetect,
+    ));
   }
 
   @override
