@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner/app/core/model/scan_item.dart';
-import 'package:qr_scanner/app/core/widgets/dialog.dart';
+import 'package:qr_scanner/app/core/utils/helper.dart';
 import 'package:qr_scanner/app/services/scan_item_service.dart';
 
 class HomeScreenWidget extends StatefulWidget {
@@ -14,8 +13,6 @@ class HomeScreenWidget extends StatefulWidget {
 
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   List<dynamic> scannedItems = [];
-
-  String? _uri;
 
   @override
   void initState() {
@@ -64,18 +61,12 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   void _handleClose() {
     if (mounted) {
       context.pop(false);
-      setState(() {
-        _uri = null;
-      });
     }
   }
 
   void _handleOpen(String? uri) {
     if (mounted && uri != null) {
       context.pop(true);
-      setState(() {
-        _uri = null;
-      });
       _parseOpenBarcode(uri);
     }
   }
