@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_scanner/app/core/constants/constants.dart';
+import 'package:qr_scanner/app/core/providers/app_settings_provider.dart';
 import 'package:qr_scanner/app/core/widgets/checkbox_form.dart';
 import 'package:qr_scanner/app/services/scan_item_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 
 class SettingsScreenWidget extends StatefulWidget {
   const SettingsScreenWidget({super.key});
@@ -18,27 +20,12 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
   @override
   void initState() {
     super.initState();
-    _loadRememberedSettings();
-  }
-
-  // Load remembered settings
-  Future<void> _loadRememberedSettings() async {
-    final preferences = await SharedPreferences.getInstance();
-    final settingsSaveOnDetect =
-        preferences.getBool(Constants.settingsSaveOnDetect) ?? false;
-
-    setState(() {
-      saveOnDetect = settingsSaveOnDetect;
-    });
   }
 
   void _onTapSaveOnDetect() async {
-    final preferences = await SharedPreferences.getInstance();
-    final newValue = !saveOnDetect;
-    setState(() {
-      saveOnDetect = newValue;
-    });
-    preferences.setBool(Constants.settingsSaveOnDetect, newValue);
+    if (mounted) {
+      context.read<AppSettingsProvider>().toggleSaveOnDetect();
+    }
   }
 
   void _handleFlushHive() {
@@ -81,7 +68,9 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
             Column(
               children: [
                 CheckboxForm(
-                    value: saveOnDetect,
+                    value: context
+                        .watch<AppSettingsProvider>()
+                        .settingsSaveOnDetect,
                     label: "Save on detect",
                     onTap: _onTapSaveOnDetect),
               ],

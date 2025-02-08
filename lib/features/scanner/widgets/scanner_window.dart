@@ -1,22 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:qr_scanner/app/core/model/scan_item.dart';
+import 'package:qr_scanner/app/core/providers/app_settings_provider.dart';
 import 'package:qr_scanner/app/core/utils/helper.dart';
 import 'package:qr_scanner/app/core/widgets/text_error.dart';
 import 'package:qr_scanner/app/core/widgets/text_success.dart';
 import 'package:qr_scanner/app/services/scan_item_service.dart';
+import 'package:qr_scanner/features/scanner/widgets/scanner_error_widget.dart';
 
-class BarcodeScannerWithScanWindow extends StatefulWidget {
-  const BarcodeScannerWithScanWindow({super.key});
+class ScannerWindow extends StatefulWidget {
+  const ScannerWindow({super.key});
 
   @override
-  State<BarcodeScannerWithScanWindow> createState() =>
-      _BarcodeScannerWithScanWindowState();
+  State<ScannerWindow> createState() => _ScannerWindowState();
 }
 
-class _BarcodeScannerWithScanWindowState
-    extends State<BarcodeScannerWithScanWindow> {
+class _ScannerWindowState extends State<ScannerWindow> {
   final MobileScannerController controller = MobileScannerController(
     detectionSpeed: DetectionSpeed.unrestricted,
   );
@@ -35,22 +36,25 @@ class _BarcodeScannerWithScanWindowState
   }
 
   void _saveAsScanItem(Barcode? barcode) {
-    if (barcode == null) {
-      if (mounted) {
+    if (mounted) {
+      if (barcode == null) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: TextErrorWidget(
           text: "Error: Can't read QR Code!",
         )));
+        return;
       }
-      return;
-    }
-    if (barcode.rawValue != null) {
-      final scanItem = ScanItem.create(barcode.rawValue!);
-      ScanItemService.saveScanItem(scanItem);
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: TextSuccessWidget(
-        text: "QR Saved!",
-      )));
+      final saveOnDetect =
+          Provider.of<AppSettingsProvider>(context, listen: false)
+              .settingsSaveOnDetect;
+      if (barcode.rawValue != null && saveOnDetect) {
+        final scanItem = ScanItem.create(barcode.rawValue!);
+        ScanItemService.saveScanItem(scanItem);
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: TextSuccessWidget(
+          text: "QR Saved!",
+        )));
+      }
     }
   }
 
@@ -91,10 +95,16 @@ class _BarcodeScannerWithScanWindowState
         ]);
   }
 
+  MobileScannerErrorBuilder scannerErrorBuilder =
+      (BuildContext ctx, MobileScannerException e, Widget? w) =>
+          ScannerErrorWidget(error: e);
+
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
+    return Expanded(
         child: MobileScanner(
+      fit: BoxFit.cover,
+      errorBuilder: scannerErrorBuilder,
       controller: controller,
       onDetect: _handleOnDetect,
     ));
