@@ -19,7 +19,7 @@ class ScannerWindow extends StatefulWidget {
 
 class _ScannerWindowState extends State<ScannerWindow> {
   final MobileScannerController controller = MobileScannerController(
-    detectionSpeed: DetectionSpeed.unrestricted,
+    detectionSpeed: DetectionSpeed.normal,
   );
 
   Barcode? _barcode;
@@ -101,13 +101,12 @@ class _ScannerWindowState extends State<ScannerWindow> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-        child: MobileScanner(
+    return MobileScanner(
       fit: BoxFit.cover,
       errorBuilder: scannerErrorBuilder,
       controller: controller,
       onDetect: _handleOnDetect,
-    ));
+    );
   }
 
   @override
