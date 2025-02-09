@@ -65,25 +65,25 @@ dart run flutter_launcher_icons
 
 Extract apks from bundle:
 ```bash
-java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=tool/app.apks
 ```
 
 Extract apks from bundle: (device specific)
 ```bash
-java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks --connected-device --device-id=<serial-id>
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=tool/app.apks --connected-device --device-id=<serial-id>
 ```
 
 Extract apks from bundle: (keystore setup)
 ```bash
-java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks --ks=<keystore-path> --ks-pass=pass:<keystore-pass> --ks-key-alias=<key-alias> --key-pass=pass:<key-pass>
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=tool/app.apks --ks=<keystore-path> --ks-pass=pass:<keystore-pass> --ks-key-alias=<key-alias> --key-pass=pass:<key-pass>
 ```
 
 Extract apks from bundle: (Recommended: device specific and keystore setup)
 ```bash
-java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks --connected-device --device-id=<serial-id> --ks=<keystore-path> --ks-pass=pass:<keystore-pass> --ks-key-alias=<key-alias> --key-pass=pass:<key-pass>
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=tool/app.apks --connected-device --device-id=<serial-id> --ks=<keystore-path> --ks-pass=pass:<keystore-pass> --ks-key-alias=<key-alias> --key-pass=pass:<key-pass>
 ```
 
 Install apks from bundle:
 ```bash
-java -jar tool/bundletool-all-1.18.0.jar install-apks --apks=app.apks --device-id=<serial-id>
+java -jar tool/bundletool-all-1.18.0.jar install-apks --apks=tool/app.apks --device-id=<serial-id>
 ```
