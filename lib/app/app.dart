@@ -105,9 +105,9 @@ class MyApp extends StatelessWidget {
           bodyLarge: TextStyle(color: darkGenericColor),
           bodyMedium: TextStyle(color: darkGenericColor),
           bodySmall: TextStyle(color: darkGenericColor),
-          labelLarge: TextStyle(color: lightGenericColor),
-          labelMedium: TextStyle(color: lightGenericColor),
-          labelSmall: TextStyle(color: lightGenericColor),
+          labelLarge: TextStyle(color: darkGenericColor),
+          labelMedium: TextStyle(color: darkGenericColor),
+          labelSmall: TextStyle(color: darkGenericColor),
         ),
       ),
       darkTheme: ThemeData.dark().copyWith(
