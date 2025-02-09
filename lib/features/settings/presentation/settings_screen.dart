@@ -71,7 +71,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
                     value: context
                         .watch<AppSettingsProvider>()
                         .settingsSaveOnDetect,
-                    label: "Save on detect",
+                    label: "Save QR Code after scanning.",
                     onTap: _onTapSaveOnDetect),
               ],
             ),
