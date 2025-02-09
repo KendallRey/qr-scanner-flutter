@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_scanner/app/core/model/scan_item.dart';
 import 'package:qr_scanner/app/core/utils/helper.dart';
+import 'package:qr_scanner/app/core/widgets/list_label.dart';
 import 'package:qr_scanner/app/services/scan_item_service.dart';
 
 class HomeScreenWidget extends StatefulWidget {
@@ -12,6 +13,7 @@ class HomeScreenWidget extends StatefulWidget {
 }
 
 class _HomeScreenWidgetState extends State<HomeScreenWidget> {
+  bool isLoaded = false;
   List<dynamic> scannedItems = [];
 
   @override
@@ -24,6 +26,7 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
     final savedScannedItems = await ScanItemService.getAllScannedItems();
     setState(() {
       scannedItems = savedScannedItems;
+      isLoaded = true;
     });
   }
 
@@ -92,30 +95,44 @@ class _HomeScreenWidgetState extends State<HomeScreenWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(8),
-      child: Stack(
-        children: [
-          ListView.builder(
-            itemCount: scannedItems.length,
-            itemBuilder: (context, index) {
-              final item = scannedItems[index];
-              return ListTile(
-                title: GestureDetector(
-                  onTap: () => _showOpenScanItemDialog(item.id),
-                  child: Text(item.id ?? ':ID:'),
+      child: !isLoaded
+          ? Center(
+              child: ListLabel(
+                label: "Loading saved QR Codes ...",
+                isLoading: true,
+              ),
+            )
+          : scannedItems.isEmpty
+              ? Center(
+                  child: ListLabel(
+                      label: "No saved QR Code/s found.",
+                      icon: Icons.disabled_by_default_outlined),
+                )
+              : Stack(
+                  children: [
+                    ListView.builder(
+                      itemCount: scannedItems.length,
+                      itemBuilder: (context, index) {
+                        final item = scannedItems[index];
+                        return ListTile(
+                          title: GestureDetector(
+                            onTap: () => _showOpenScanItemDialog(item.id),
+                            child: Text(item.id ?? ':ID:'),
+                          ),
+                          subtitle: Text(item.createdAt ?? 'No Date'),
+                          trailing: IconButton(
+                            onPressed: () => _showDeleteItemDialog(item),
+                            icon: Icon(Icons.delete),
+                            color: Colors.red,
+                          ),
+                          shape: BorderDirectional(
+                              bottom: BorderSide(
+                                  color: Theme.of(context).dividerColor)),
+                        );
+                      },
+                    )
+                  ],
                 ),
-                subtitle: Text(item.createdAt ?? 'No Date'),
-                trailing: IconButton(
-                  onPressed: () => _showDeleteItemDialog(item),
-                  icon: Icon(Icons.delete),
-                  color: Colors.red,
-                ),
-                shape: BorderDirectional(
-                    bottom: BorderSide(color: Theme.of(context).dividerColor)),
-              );
-            },
-          )
-        ],
-      ),
     );
   }
 }
