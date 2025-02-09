@@ -55,3 +55,35 @@ dart run flutter_launcher_icons
 ```
 - flags
   - `-f` file name (make sure it is in same directory as pubspec.yaml)
+
+## Building and Installing of AAB
+- [Bundle Tool](https://developer.android.com/tools/bundletool)
+
+**Notes:**
+- create `tool` directory to project root and add bundletool.jar there
+- `flutter devices` - run to get devices serial-id
+
+Extract apks from bundle:
+```bash
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks
+```
+
+Extract apks from bundle: (device specific)
+```bash
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks --connected-device --device-id=<serial-id>
+```
+
+Extract apks from bundle: (keystore setup)
+```bash
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks --ks=<keystore-path> --ks-pass=pass:<keystore-pass> --ks-key-alias=<key-alias> --key-pass=pass:<key-pass>
+```
+
+Extract apks from bundle: (Recommended: device specific and keystore setup)
+```bash
+java -jar tool/bundletool-all-1.18.0.jar build-apks --bundle build/app/outputs/bundle/release/app-release.aab --output=app.apks --connected-device --device-id=<serial-id> --ks=<keystore-path> --ks-pass=pass:<keystore-pass> --ks-key-alias=<key-alias> --key-pass=pass:<key-pass>
+```
+
+Install apks from bundle:
+```bash
+java -jar tool/bundletool-all-1.18.0.jar install-apks --apks=app.apks --device-id=<serial-id>
+```
