@@ -78,7 +78,7 @@ class AppHelper {
         });
   }
 
-  static Future<void> requestCameraPermission(BuildContext ctx) async {
+  static Future<bool?> requestCameraPermission(BuildContext ctx) async {
     if (ctx.mounted) {
       PermissionStatus status = await Permission.camera.status;
 
@@ -86,19 +86,22 @@ class AppHelper {
         status = await Permission.camera.request();
       }
       if ((status.isDenied || !status.isGranted) && ctx.mounted) {
-        _showRequestCameraPermissionDialog(ctx);
+        return _showRequestCameraPermissionDialog(ctx);
       } else if (status.isGranted && ctx.mounted) {
         ScaffoldMessenger.of(ctx).showSnackBar(
           const SnackBar(content: Text("Camera permission granted!")),
         );
+        return true;
       } else if (status.isPermanentlyDenied && ctx.mounted) {
-        _showRequestCameraPermissionDialog(ctx);
+        return _showRequestCameraPermissionDialog(ctx);
       }
     } else {
       ScaffoldMessenger.of(ctx).showSnackBar(
         const SnackBar(content: Text("Camera permission denied.")),
       );
+      return false;
     }
+    return false;
   }
 
   static Future<bool> getHasCameraPermission() async {

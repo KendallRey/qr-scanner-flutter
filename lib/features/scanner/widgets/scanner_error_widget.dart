@@ -3,7 +3,9 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner/app/core/utils/helper.dart';
 
 class ScannerErrorWidget extends StatelessWidget {
-  const ScannerErrorWidget({super.key, required this.error});
+  final VoidCallback onPermissionGranted;
+  const ScannerErrorWidget(
+      {super.key, required this.error, required this.onPermissionGranted});
 
   final MobileScannerException error;
 
@@ -20,6 +22,13 @@ class ScannerErrorWidget extends StatelessWidget {
         errorMessage = 'Scanning is unsupported on this device';
       default:
         errorMessage = 'Generic Error';
+    }
+
+    void requestCameraPermission() async {
+      final isGranted = await AppHelper.requestCameraPermission(context);
+      if (isGranted == true) {
+        onPermissionGranted();
+      }
     }
 
     return ColoredBox(
@@ -42,7 +51,7 @@ class ScannerErrorWidget extends StatelessWidget {
             ),
             if (error.errorCode == MobileScannerErrorCode.permissionDenied)
               ElevatedButton(
-                onPressed: () => AppHelper.requestCameraPermission(context),
+                onPressed: () => requestCameraPermission(),
                 child: Text('Ask Camera Permission'),
               )
           ],
