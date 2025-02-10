@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:qr_scanner/app/router.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  MyApp({super.key});
 
-  final Color darkActionColor = Colors.deepOrange;
+  final Color darkActionColor = Color.fromARGB(255, 28, 148, 204);
+  final Color darkUnselectedColor = Color.fromARGB(255, 246, 246, 246);
   final Color darkShadeColor = Colors.black38;
   final Color darkFocusedColor = Colors.yellow;
-  final Color darkGenericColor = Colors.black;
+  final Color darkGenericColor = Color.fromARGB(255, 22, 22, 22);
   final Color darkDisabledColor = Colors.blueGrey;
   final Color darkErrorColor = Colors.red;
   final Color darkErrorFocusColor = Colors.redAccent;
+  final Color darkTextColor = Color.fromARGB(255, 246, 246, 246);
 
-  final Color lightActionColor = Colors.blue;
+  final Color lightActionColor = Color.fromARGB(255, 37, 179, 245);
+  final Color lightUnselectedColor = Color.fromARGB(255, 93, 93, 93);
   final Color lightShadeColor = Colors.white38;
-  final Color lightFocusedColor = Colors.cyan;
+  final Color lightFocusedColor = Color.fromARGB(255, 120, 212, 250);
   final Color lightGenericColor = Colors.white;
   final Color lightDisabledColor = Colors.blueGrey;
   final Color lightErrorColor = Colors.red;
   final Color lightErrorFocusColor = Colors.redAccent;
+  final Color lightTextColor = Color.fromARGB(255, 46, 46, 46);
 
   WidgetStateProperty<Color?> stateColorBackgroundDarkMode() {
     return WidgetStateProperty.resolveWith((state) {
@@ -55,7 +59,7 @@ class MyApp extends StatelessWidget {
         )),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             selectedItemColor: lightActionColor,
-            unselectedItemColor: darkGenericColor,
+            unselectedItemColor: lightUnselectedColor,
             backgroundColor: lightActionColor),
         checkboxTheme: CheckboxThemeData(
           checkColor: WidgetStateProperty.all(lightActionColor),
@@ -93,21 +97,21 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide(color: lightErrorFocusColor),
             )),
         textTheme: TextTheme(
-          displayLarge: TextStyle(color: darkGenericColor),
-          displayMedium: TextStyle(color: darkGenericColor),
-          displaySmall: TextStyle(color: darkGenericColor),
-          headlineLarge: TextStyle(color: darkGenericColor),
-          headlineMedium: TextStyle(color: darkGenericColor),
-          headlineSmall: TextStyle(color: darkGenericColor),
-          titleLarge: TextStyle(color: darkGenericColor),
-          titleMedium: TextStyle(color: darkGenericColor),
-          titleSmall: TextStyle(color: darkGenericColor),
-          bodyLarge: TextStyle(color: darkGenericColor),
-          bodyMedium: TextStyle(color: darkGenericColor),
-          bodySmall: TextStyle(color: darkGenericColor),
-          labelLarge: TextStyle(color: darkGenericColor),
-          labelMedium: TextStyle(color: darkGenericColor),
-          labelSmall: TextStyle(color: darkGenericColor),
+          displayLarge: TextStyle(color: lightTextColor),
+          displayMedium: TextStyle(color: lightTextColor),
+          displaySmall: TextStyle(color: lightTextColor),
+          headlineLarge: TextStyle(color: lightTextColor),
+          headlineMedium: TextStyle(color: lightTextColor),
+          headlineSmall: TextStyle(color: lightTextColor),
+          titleLarge: TextStyle(color: lightTextColor),
+          titleMedium: TextStyle(color: lightTextColor),
+          titleSmall: TextStyle(color: lightTextColor),
+          bodyLarge: TextStyle(color: lightTextColor),
+          bodyMedium: TextStyle(color: lightTextColor),
+          bodySmall: TextStyle(color: lightTextColor),
+          labelLarge: TextStyle(color: lightTextColor),
+          labelMedium: TextStyle(color: lightTextColor),
+          labelSmall: TextStyle(color: lightTextColor),
         ),
       ),
       darkTheme: ThemeData.dark().copyWith(
@@ -123,7 +127,7 @@ class MyApp extends StatelessWidget {
         )),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
             selectedItemColor: darkActionColor,
-            unselectedItemColor: lightGenericColor,
+            unselectedItemColor: darkUnselectedColor,
             backgroundColor: darkActionColor),
         checkboxTheme: CheckboxThemeData(
           checkColor: WidgetStateProperty.all(darkActionColor),
@@ -161,21 +165,21 @@ class MyApp extends StatelessWidget {
               borderSide: BorderSide(color: darkErrorFocusColor),
             )),
         textTheme: TextTheme(
-          displayLarge: TextStyle(color: lightGenericColor),
-          displayMedium: TextStyle(color: lightGenericColor),
-          displaySmall: TextStyle(color: lightGenericColor),
-          headlineLarge: TextStyle(color: lightGenericColor),
-          headlineMedium: TextStyle(color: lightGenericColor),
-          headlineSmall: TextStyle(color: lightGenericColor),
-          titleLarge: TextStyle(color: lightGenericColor),
-          titleMedium: TextStyle(color: lightGenericColor),
-          titleSmall: TextStyle(color: lightGenericColor),
-          bodyLarge: TextStyle(color: lightGenericColor),
-          bodyMedium: TextStyle(color: lightGenericColor),
-          bodySmall: TextStyle(color: lightGenericColor),
-          labelLarge: TextStyle(color: lightGenericColor),
-          labelMedium: TextStyle(color: lightGenericColor),
-          labelSmall: TextStyle(color: lightGenericColor),
+          displayLarge: TextStyle(color: darkTextColor),
+          displayMedium: TextStyle(color: darkTextColor),
+          displaySmall: TextStyle(color: darkTextColor),
+          headlineLarge: TextStyle(color: darkTextColor),
+          headlineMedium: TextStyle(color: darkTextColor),
+          headlineSmall: TextStyle(color: darkTextColor),
+          titleLarge: TextStyle(color: darkTextColor),
+          titleMedium: TextStyle(color: darkTextColor),
+          titleSmall: TextStyle(color: darkTextColor),
+          bodyLarge: TextStyle(color: darkTextColor),
+          bodyMedium: TextStyle(color: darkTextColor),
+          bodySmall: TextStyle(color: darkTextColor),
+          labelLarge: TextStyle(color: darkTextColor),
+          labelMedium: TextStyle(color: darkTextColor),
+          labelSmall: TextStyle(color: darkTextColor),
         ),
       ),
       // themeMode: ThemeMode.light,

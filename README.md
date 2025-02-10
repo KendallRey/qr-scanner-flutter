@@ -36,10 +36,10 @@ These are commands used for setup of application e.g. Splash Screen, Launcher Ic
 
 After setting up the configuration, apply the config to the app (android or ios)
 ```bash
-dart run flutter_native_splash:create
+dart run flutter_native_splash:create --path=splash_screen.yaml
 ```
 - flags
-  - `--path` path to file e.g. `splash.yaml`
+  - `--path` path to file e.g. `splash_screen.yaml`
 
 ### Launcher Icon
 - [Flutter Launcher Icons](https://pub.dev/packages/flutter_launcher_icons)
