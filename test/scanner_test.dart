@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
-import 'package:qr_scanner/app/app.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_test/hive_test.dart';
 import 'package:qr_scanner/app/core/constants/constants.dart';
