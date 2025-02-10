@@ -39,7 +39,7 @@ After setting up the configuration, apply the config to the app (android or ios)
 dart run flutter_native_splash:create
 ```
 - flags
-  - `--path` path to file e.g. `assets/logo.png`
+  - `--path` path to file e.g. `splash.yaml`
 
 ### Launcher Icon
 - [Flutter Launcher Icons](https://pub.dev/packages/flutter_launcher_icons)
