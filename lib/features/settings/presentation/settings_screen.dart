@@ -68,6 +68,7 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
             Column(
               children: [
                 CheckboxForm(
+                    key: Key(Keys.checkboxSaveOnDetect),
                     value: context
                         .watch<AppSettingsProvider>()
                         .settingsSaveOnDetect,

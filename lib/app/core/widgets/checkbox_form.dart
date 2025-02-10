@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:qr_scanner/app/core/constants/constants.dart';
 
 class CheckboxForm extends StatelessWidget {
   final bool value;
@@ -6,7 +7,7 @@ class CheckboxForm extends StatelessWidget {
   final VoidCallback? onTap;
   final String label;
   const CheckboxForm(
-      {super.key,
+      {super.key = const Key(Keys.checkboxForm),
       required this.value,
       this.onChanged,
       required this.label,
@@ -17,7 +18,13 @@ class CheckboxForm extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Row(
-        children: [Checkbox(value: value, onChanged: onChanged), Text(label)],
+        children: [
+          Checkbox(
+              key: Key(Keys.checkboxCustom),
+              value: value,
+              onChanged: onChanged),
+          Text(key: Key(Keys.checkboxLabel), label)
+        ],
       ),
     );
   }
