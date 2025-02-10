@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:qr_scanner/app/core/utils/helper.dart';
 
 class ScannerErrorWidget extends StatelessWidget {
   const ScannerErrorWidget({super.key, required this.error});
@@ -39,6 +40,11 @@ class ScannerErrorWidget extends StatelessWidget {
               error.errorDetails?.message ?? '',
               style: const TextStyle(color: Colors.white),
             ),
+            if (error.errorCode == MobileScannerErrorCode.permissionDenied)
+              ElevatedButton(
+                onPressed: () => AppHelper.requestCameraPermission(context),
+                child: Text('Ask Camera Permission'),
+              )
           ],
         ),
       ),

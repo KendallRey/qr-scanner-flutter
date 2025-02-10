@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_scanner/app/core/constants/constants.dart';
 import 'package:qr_scanner/app/core/providers/app_settings_provider.dart';
+import 'package:qr_scanner/app/core/utils/helper.dart';
 import 'package:qr_scanner/app/core/widgets/checkbox_form.dart';
 import 'package:qr_scanner/app/services/scan_item_service.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreenWidget extends StatefulWidget {
@@ -15,11 +15,19 @@ class SettingsScreenWidget extends StatefulWidget {
 }
 
 class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
-  bool saveOnDetect = false;
+  bool hasCameraPermission = true;
 
   @override
   void initState() {
     super.initState();
+    _checkHasCameraPermission();
+  }
+
+  void _checkHasCameraPermission() async {
+    final hasPermission = await AppHelper.getHasCameraPermission();
+    setState(() {
+      hasCameraPermission = hasPermission;
+    });
   }
 
   void _onTapSaveOnDetect() async {
@@ -63,24 +71,34 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Column(
-              children: [
-                CheckboxForm(
-                    key: Key(Keys.checkboxSaveOnDetect),
-                    value: context
-                        .watch<AppSettingsProvider>()
-                        .settingsSaveOnDetect,
-                    label: "Save QR Code after scanning",
-                    onTap: _onTapSaveOnDetect),
-              ],
-            ),
-            SizedBox(height: 32),
-            OutlinedButton(
-                onPressed: _showDeleteAllDialog,
-                child: Text('Clear Saved Data')),
-          ],
-        ));
+        child: Stack(children: [
+          Column(
+            children: [
+              Column(
+                children: [
+                  CheckboxForm(
+                      key: Key(Keys.checkboxSaveOnDetect),
+                      value: context
+                          .watch<AppSettingsProvider>()
+                          .settingsSaveOnDetect,
+                      label: "Save QR Code after scanning",
+                      onTap: _onTapSaveOnDetect),
+                ],
+              ),
+              SizedBox(height: 32),
+              OutlinedButton(
+                  onPressed: _showDeleteAllDialog,
+                  child: Text('Clear Saved Data')),
+            ],
+          ),
+          if (!hasCameraPermission)
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: ElevatedButton(
+                onPressed: () => AppHelper.requestCameraPermission(context),
+                child: Text('Ask Camera Permission'),
+              ),
+            )
+        ]));
   }
 }
