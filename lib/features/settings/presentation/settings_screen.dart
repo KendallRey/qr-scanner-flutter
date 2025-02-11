@@ -89,6 +89,46 @@ class _SettingsScreenWidgetState extends State<SettingsScreenWidget> {
               OutlinedButton(
                   onPressed: _showDeleteAllDialog,
                   child: Text('Clear Saved Data')),
+              SizedBox(height: 32),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                spacing: 12,
+                children: [
+                  Text(
+                    "Supported schemes:",
+                    style: Theme.of(context).textTheme.labelLarge,
+                  ),
+                  SizedBox(height: 2),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text("HTTPS",
+                          style: Theme.of(context).textTheme.labelMedium),
+                      Text("- Opens web links in a browser",
+                          style: Theme.of(context).textTheme.labelMedium),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text("SMS",
+                          style: Theme.of(context).textTheme.labelMedium),
+                      Text(
+                          "- Launches the messaging app with a pre-filled number.",
+                          style: Theme.of(context).textTheme.labelMedium),
+                    ],
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text("TEL",
+                          style: Theme.of(context).textTheme.labelMedium),
+                      Text("- Opens the phone dialer with a specified number.",
+                          style: Theme.of(context).textTheme.labelMedium),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
           if (!hasCameraPermission)
