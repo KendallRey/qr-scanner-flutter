@@ -7,7 +7,6 @@ import 'package:qr_scanner/app/core/providers/app_settings_provider.dart';
 import 'package:qr_scanner/app/core/utils/helper.dart';
 import 'package:qr_scanner/app/core/widgets/text_error.dart';
 import 'package:qr_scanner/app/core/widgets/text_success.dart';
-import 'package:qr_scanner/app/router.dart';
 import 'package:qr_scanner/app/services/scan_item_service.dart';
 import 'package:qr_scanner/features/scanner/widgets/scanner_error_widget.dart';
 
@@ -89,7 +88,8 @@ class _ScannerWindowState extends State<ScannerWindow> {
   }
 
   void handleOnPermissionGranted() async {
-    context.pushReplacement(AppRoutes.scanner);
+    controller.stop();
+    controller.start();
   }
 
   Future<void> _parseOpenBarcode(String? uri) async {
