@@ -86,14 +86,16 @@ class AppHelper {
         status = await Permission.camera.request();
       }
       if ((status.isDenied || !status.isGranted) && ctx.mounted) {
-        return _showRequestCameraPermissionDialog(ctx);
+        _showRequestCameraPermissionDialog(ctx);
+        return null;
       } else if (status.isGranted && ctx.mounted) {
         ScaffoldMessenger.of(ctx).showSnackBar(
           const SnackBar(content: Text("Camera permission granted!")),
         );
         return true;
       } else if (status.isPermanentlyDenied && ctx.mounted) {
-        return _showRequestCameraPermissionDialog(ctx);
+        _showRequestCameraPermissionDialog(ctx);
+        return null;
       }
     } else {
       ScaffoldMessenger.of(ctx).showSnackBar(

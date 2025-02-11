@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_scanner/app/core/model/scan_item.dart';
 import 'package:qr_scanner/app/core/providers/app_settings_provider.dart';
@@ -22,6 +23,7 @@ class _ScannerWindowState extends State<ScannerWindow> {
     detectionSpeed: DetectionSpeed.normal,
   );
 
+  late final AppLifecycleListener _listener;
   late MobileScannerErrorBuilder scannerErrorBuilder;
   Barcode? _barcode;
 
@@ -31,7 +33,17 @@ class _ScannerWindowState extends State<ScannerWindow> {
     scannerErrorBuilder =
         (BuildContext ctx, MobileScannerException e, Widget? w) =>
             ScannerErrorWidget(
-                error: e, onPermissionGranted: handleOnPermissionGranted);
+                error: e, onPermissionGranted: _handleOnPermissionGranted);
+    _listener = AppLifecycleListener(
+      onResume: _checkHasCameraPermission,
+    );
+  }
+
+  void _checkHasCameraPermission() async {
+    PermissionStatus status = await Permission.camera.status;
+    if (status.isGranted) {
+      _handleOnPermissionGranted();
+    }
   }
 
   void _handleOnDetect(BarcodeCapture captured) {
@@ -87,7 +99,7 @@ class _ScannerWindowState extends State<ScannerWindow> {
     }
   }
 
-  void handleOnPermissionGranted() async {
+  void _handleOnPermissionGranted() async {
     controller.stop();
     controller.start();
   }
@@ -123,6 +135,7 @@ class _ScannerWindowState extends State<ScannerWindow> {
   @override
   Future<void> dispose() async {
     super.dispose();
+    _listener.dispose();
     await controller.dispose();
   }
 }
