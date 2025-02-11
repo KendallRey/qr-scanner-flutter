@@ -6,6 +6,6 @@ class TextErrorWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(text, style: TextStyle(color: Theme.of(context).hintColor));
+    return Text(text, style: TextStyle(color: Colors.red));
   }
 }
